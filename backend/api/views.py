@@ -14,7 +14,7 @@ class FetchRepoListData(generics.CreateAPIView):
     serializer_class = SearchQuerySerializer
     
     def create(self, request, *args, **kwargs):
-        print(request.data)
+        # print(request.data)
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             query = serializer.validated_data["userquery"]
@@ -25,13 +25,25 @@ class FetchRepoListData(generics.CreateAPIView):
                 
                 if resp.status_code == 200:
                     data = resp.json()
-                    updata = data["items"]
-                    # name, fork_count, full_name ->html_url , owner.login, stargazers_count
-                    mydata = {
-                        "datas": updata 
-                    }
+                    # updata = data["items"]
+                    # name, forks_count, full_name ->html_url , owner.login, stargazers_count
+                    full_data = []
+                    for items in data.get("items",[]):
+                        my_data = {
+                            "name" : items["name"],
+                            "description" : items["description"],
+                            "owner": items["owner"]["login"],
+                            "url": items["html_url"],
+                            "stars" : items["stargazers_count"],
+                            "forks" : items["forks_count"]
+                        }
+                        full_data.append(my_data)
+                    searched_repositorys = {
+                        "repositories": full_data
+                    }    
+                    
                     # print(updata)
-                    return Response(mydata, status=status.HTTP_200_OK)
+                    return Response(searched_repositorys, status=status.HTTP_200_OK)
                 else:
                     ERR_MSG = {"error": "Failed to fetch data! Maybe unavailable"}
                     return Response(ERR_MSG, status=resp.status_code)
