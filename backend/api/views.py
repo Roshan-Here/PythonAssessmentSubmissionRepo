@@ -92,7 +92,7 @@ class FetchRepoData(generics.CreateAPIView):
                 }
                 
                 data_instance = Repositories.objects.create(**my_data)
-                print(data_instance)
+                # print(data_instance)
                 if resp.status_code ==200:
                     return Response(my_data, status=status.HTTP_200_OK)
                 else:
@@ -107,11 +107,17 @@ class FetchRepoData(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class SavedRepositroyListView(generics.ListAPIView):
+    """_summary_
+    To List all the saved datas
+    """
     queryset = Repositories.objects.all().order_by('searched_at')
     serializer_class = RepositoriesSerializer
     
     
 class EraseAllSavedRepositories(APIView):
+    """_summary_
+    To delete all the saved datas
+    """
     def delete(self,request,*args,**kwargs):
         try:
             Repositories.objects.all().delete()
