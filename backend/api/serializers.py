@@ -19,6 +19,7 @@ class RepositoriesSerializer(serializers.ModelSerializer):
             "repo_name", 
             "owner_name",
             "description",
+            "language",
             "html_url",
             "avathar_url",
             "stars_count",

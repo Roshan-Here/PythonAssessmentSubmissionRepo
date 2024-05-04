@@ -13,7 +13,7 @@ export default function Header() {
             </Link>
           </div>
         <div className='text-xl text-black p-3'>
-          <Link to="/">
+          <Link to="/recent">
             Recent Search <FontAwesomeIcon icon={faClockRotateLeft} />
           </Link>
         </div>

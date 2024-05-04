@@ -32,13 +32,16 @@ class FetchRepoListData(generics.CreateAPIView):
                     full_data = []
                     for items in data.get("items",[]):
                         my_data = {
+                            "id" : items["id"],
                             "name" : items["name"],
                             "full_name": items["full_name"],
                             "description" : items["description"],
                             "owner": items["owner"]["login"],
                             "url": items["html_url"],
                             "stars" : items["stargazers_count"],
-                            "forks" : items["forks_count"]
+                            "forks" : items["forks_count"],
+                            "language" : items['language'],
+                            "updated_at" : items["updated_at"]
                         }
                         full_data.append(my_data)
                     searched_repositorys = {
@@ -86,6 +89,7 @@ class FetchRepoData(generics.CreateAPIView):
                     "repo_name" : data["full_name"],
                     "owner_name" : data["owner"]["login"],
                     "description" : data["description"],
+                    "language" : data["language"],
                     "html_url" : data["html_url"],
                     "avathar_url" : data["owner"]["avatar_url"],
                     "stars_count" : data["stargazers_count"],
@@ -111,7 +115,7 @@ class SavedRepositroyListView(generics.ListAPIView):
     """_summary_
     To List all the saved datas
     """
-    queryset = Repositories.objects.all().order_by('searched_at')
+    queryset = Repositories.objects.all().order_by('-searched_at')
     serializer_class = RepositoriesSerializer
     
     
