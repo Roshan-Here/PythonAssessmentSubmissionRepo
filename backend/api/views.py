@@ -33,6 +33,7 @@ class FetchRepoListData(generics.CreateAPIView):
                     for items in data.get("items",[]):
                         my_data = {
                             "name" : items["name"],
+                            "full_name": items["full_name"],
                             "description" : items["description"],
                             "owner": items["owner"]["login"],
                             "url": items["html_url"],
