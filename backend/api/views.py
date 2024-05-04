@@ -2,7 +2,8 @@ from django.shortcuts import render
 
 from rest_framework import generics, status
 from rest_framework.response import Response
-from .serializers import SearchQuerySerializer
+from .serializers import SearchQuerySerializer,RepositoriesSerializer
+from .models import Repositories
 import requests
 
 # creating view for fetching List of Repository datas 
@@ -53,3 +54,54 @@ class FetchRepoListData(generics.CreateAPIView):
                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FetchRepoData(generics.CreateAPIView):
+    """_summary_
+        fetching particular repository name using same serializer for query
+    """
+    serializer_class = SearchQuerySerializer
+    
+    def create(self, request, *args, **kwargs):
+        # incomming data
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            query = serializer.validated_data["userquery"]
+            # print(query)
+            try:
+                git_endpint = f"https://api.github.com/repos/{query}"
+                resp = requests.get(git_endpint)
+                data = resp.json()
+                # print(data["full_name"]) # username/repo_name
+                # print(data["owner"]["login"]) # username
+                # print(data["description"])
+                # print(data["html_url"]) # go to repository link
+                # print(data["owner"]["avatar_url"])
+                # print(data["stargazers_count"]) # stars count
+                # print(data["forks"]) # fork count
+                
+                my_data = {
+                    "repo_name" : data["full_name"],
+                    "owner_name" : data["owner"]["login"],
+                    "description" : data["description"],
+                    "html_url" : data["html_url"],
+                    "avathar_url" : data["owner"]["avatar_url"],
+                    "stars_count" : data["stargazers_count"],
+                    "forks_count" : data["forks"] 
+                }
+                
+                data_instance = Repositories.objects.create(**my_data)
+                print(data_instance)
+                if resp.status_code ==200:
+                    return Response(my_data, status=status.HTTP_200_OK)
+                else:
+                    ERR_MSG = {
+                        "error": "No data found for this repository" 
+                    }
+                    return Response(ERR_MSG, status=resp.status_code)
+                
+            except Exception as e:
+                return Response({"error":str(e)},status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
