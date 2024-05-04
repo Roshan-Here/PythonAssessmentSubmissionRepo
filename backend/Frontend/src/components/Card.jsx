@@ -26,7 +26,7 @@ function Card({name,desc,forks,stars,full_name,language,updated}) {
     }
 
   return (
-    <div className='m-4'>
+    <div className='m-2'>
         <div className='card w-full bg-base-100 shadow-2xl'>
             <div className='card-body'>
                 <h1 className='card-title'>

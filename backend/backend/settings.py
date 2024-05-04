@@ -18,6 +18,10 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+TEMP_DIR = os.path.join(BASE_DIR,"Frontend/dist")
+CUSTOM_STATICDIR = os.path.join(BASE_DIR,"Frontend/dist/assets")
+print(TEMP_DIR)
+print(CUSTOM_STATICDIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -79,7 +83,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMP_DIR,],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -146,3 +150,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# setting up react with django
+STATIC_URL = 'assets/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+print(STATIC_ROOT)
+STATICFILES_DIRS = [
+    CUSTOM_STATICDIR,
+]

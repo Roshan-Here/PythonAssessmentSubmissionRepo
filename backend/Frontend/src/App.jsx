@@ -11,7 +11,6 @@ function App() {
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='/about/:link' element={<About/>}/>
-          <Route path='/wow' element={<About/>}/>
           <Route path='/recent' element={<Rescent/>}/>
         </Routes>
       </BrowserRouter>
