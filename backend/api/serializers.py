@@ -11,7 +11,7 @@ class SearchQuerySerializer(serializers.Serializer):
             raise serializers.ValidationError("search query is required!")
         return query
     
-class RepositoriesSerializer(serializers.Serializer):
+class RepositoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Repositories
         fields = [
